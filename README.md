@@ -77,3 +77,61 @@ streamlit run app.py
 
 > ⚠️ 가상 데이터로 학습한 모델이며, 결과는 **상담 우선순위 참고용**입니다.
 > 인사 평가나 불이익 판단에는 사용하지 않습니다.
+
+---------------------------------
+
+## 👥 Employee Attrition Risk Prediction
+
+A model that uses HR data to identify employees at high risk of leaving. The goal is to help the HR team reach out to high-risk employees first, reducing the loss of key talent and hiring costs.
+
+### 1. Background & Objectives
+
+**Background**
+Intentions to resign usually surface only during exit interviews, when it is often too late to change the outcome. However, HR data such as overtime, salary, and satisfaction levels already contain early signs of attrition.
+
+**Objectives**
+- Predict each employee's probability of leaving and identify the high-risk group
+- Support the HR team with proactive retention conversations
+
+**Evaluation Metrics**
+Since only about 16% of employees left, the dataset is imbalanced. We therefore use Recall and ROC-AUC instead of accuracy, because missing an employee who will leave is more costly.
+
+### 2. Feature Engineering
+
+- **Data:** IBM HR Analytics dataset (1,470 employees, 35 variables)
+- **Removed:** Constant columns (EmployeeCount, StandardHours, Over18) and the identifier (EmployeeNumber)
+- **Encoding:** One-Hot encoding for categorical variables; OverTime and Gender encoded as 0/1
+- **Scaling:** StandardScaler for numerical variables
+- **Class imbalance:** class_weight or SMOTE
+
+<details>
+<summary>View derived features</summary>
+
+</details>
+
+### 3. Pipeline
+
+Data cleaning → Feature engineering → Train/validation split → Model training & tuning → Model saving → Web app serving
+
+- The trained model is saved as `hr_attrition_v1.pkl`, and the feature list and performance metrics are saved in `hr_attrition_v1_meta.json`.
+- `app.py` loads the model and displays the prediction results.
+
+**Final Performance**
+
+| ROC-AUC | Recall |
+|---|---|
+| 0.818 | 29.6% |
+
+### 4. Screenshots
+
+<img width="2742" height="1420" alt="hr_pc1" src="https://github.com/user-attachments/assets/8f55ee7a-c1be-4db7-b5fc-b3e3d9c6b913" />
+<img width="2712" height="1386" alt="hr_pc2" src="https://github.com/user-attachments/assets/4c0e9789-9997-4e2a-a694-f44301de4666" />
+
+### How to Run
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+> ⚠️ This model was trained on fictional data. Its results are intended only as a reference for prioritizing retention conversations and must not be used for performance evaluations or any decisions that disadvantage employees.
